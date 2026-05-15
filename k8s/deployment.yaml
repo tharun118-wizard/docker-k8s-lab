@@ -1,0 +1,44 @@
+apiVersion: apps/v1      # API group for Deployments
+kind: Deployment
+metadata:
+  name: snake-game-deployment
+  labels:
+    app: snake-game
+spec:
+  replicas: 3             # Run 3 identical pods for high availability
+  selector:
+    matchLabels:
+      app: snake-game     # This selector MUST match template.metadata.labels
+  template:               # Pod template — Kubernetes uses this to create each pod
+    metadata:
+      labels:
+        app: snake-game
+    spec:
+      containers:
+      - name: snake-game
+        image: snake-game:1.0
+        imagePullPolicy: Never  # Use image already in Minikube — don't pull from registry
+        ports:
+        - containerPort: 4000
+          name: http
+        resources:
+          requests:            # Minimum resources the pod NEEDS to be scheduled
+            memory: "128Mi"
+            cpu: "100m"        # 100 millicores = 0.1 CPU core
+          limits:              # Maximum resources the pod is ALLOWED to use
+            memory: "256Mi"
+            cpu: "500m"
+        livenessProbe:         # If this fails → pod is RESTARTED
+          httpGet:
+            path: /api/health
+            port: 4000
+          initialDelaySeconds: 30    # Wait 30 s before first check (app startup time)
+          periodSeconds: 10          # Check every 10 s
+          failureThreshold: 3        # Restart after 3 consecutive failures
+        readinessProbe:        # If this fails → pod is REMOVED from load-balancer rotation
+          httpGet:
+            path: /api/health
+            port: 4000
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          failureThreshold: 3
