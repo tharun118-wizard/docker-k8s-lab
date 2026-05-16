@@ -217,8 +217,7 @@ pipeline {
 
           echo "Running health check..."
 
-          docker exec ${CONTAINER_NAME} \
-          wget -q -O- http://localhost:4000/api/health
+          curl http://localhost:4000/api/health
         """
       }
     }
