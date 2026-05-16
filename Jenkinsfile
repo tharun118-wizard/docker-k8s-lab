@@ -180,19 +180,22 @@ pipeline {
       }
     }
 
-    // ── STAGE 7: Deploy Container ────────────────
+// --- STAGE 7: Deploy to Kubernetes ---
 stage('☸️ Deploy to Kubernetes') {
 
-  steps {
+    steps {
 
-    sh '''
-      kubectl set image deployment/snake-game-deployment \
-      snake-game=tharun118wizard/snake-game:latest
+        sh """
+        kubectl apply -f k8s/
 
-      kubectl rollout status deployment/snake-game-deployment
-    '''
-  }
+        kubectl set image deployment/snake-game-deployment \
+        snake-game=tharun118wizard/snake-game:latest
+
+        kubectl rollout status deployment/snake-game-deployment
+        """
+    }
 }
+
     // ── STAGE 8: Health Check ────────────────────
     stage('💚 Health Check') {
 
