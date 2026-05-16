@@ -87,9 +87,6 @@ pipeline {
           echo 'Parallel test suite completed.'
         }
 
-        failure {
-          echo '❌ Test suite failed.'
-        }
       }
     }
 
