@@ -217,7 +217,7 @@ pipeline {
 
           echo "Running health check..."
           docker exec snake-game-container \
-         wget -q -O- http://localhost:4000/api/health
+         wget -q -O- http://127.0.0.1:4000/api/health
         """
       }
     }
