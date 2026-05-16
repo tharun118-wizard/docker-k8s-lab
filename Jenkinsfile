@@ -213,11 +213,11 @@ pipeline {
 
         sh """
           echo "Waiting for app startup..."
-          sleep 5
+          sleep 10
 
           echo "Running health check..."
-
-          curl http://localhost:4000/api/health
+          docker exec sanke-game-container \
+         wget -q -O- http://localhost:4000/api/health
         """
       }
     }
