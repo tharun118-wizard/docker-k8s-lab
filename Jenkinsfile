@@ -181,31 +181,18 @@ pipeline {
     }
 
     // ── STAGE 7: Deploy Container ────────────────
-    stage('🚀 Deploy') {
+stage('☸️ Deploy to Kubernetes') {
 
-      steps {
+  steps {
 
-        sh """
-          # Stop old container
-          docker stop ${CONTAINER_NAME} || true
+    sh '''
+      kubectl set image deployment/snake-game-deployment \
+      snake-game=tharun118wizard/snake-game:latest
 
-          # Remove old container
-          docker rm ${CONTAINER_NAME} || true
-
-          # Run new container
-          docker run -d \
-            --name ${CONTAINER_NAME} \
-            -p ${APP_PORT}:4000 \
-            -e BUILD_NUMBER=${BUILD_NUMBER} \
-            --restart unless-stopped \
-            ${DOCKER_IMAGE}
-
-          echo "Application deployed successfully!"
-          echo "URL: http://localhost:${APP_PORT}"
-        """
-      }
-    }
-
+      kubectl rollout status deployment/snake-game-deployment
+    '''
+  }
+}
     // ── STAGE 8: Health Check ────────────────────
     stage('💚 Health Check') {
 

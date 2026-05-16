@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: snake-game
-        image: snake-game:1.0
+        image: tharun118wizard/snake-game:latest
         imagePullPolicy: Never  # Use image already in Minikube — don't pull from registry
         ports:
         - containerPort: 4000
