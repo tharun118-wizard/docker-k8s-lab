@@ -213,7 +213,7 @@ pipeline {
 
         sh """
           echo "Waiting for app startup..."
-          sleep 10
+          sleep 20
 
           echo "Running health check..."
           docker exec snake-game-container \
