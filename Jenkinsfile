@@ -216,7 +216,7 @@ pipeline {
           sleep 10
 
           echo "Running health check..."
-          docker exec sanke-game-container \
+          docker exec snake-game-container \
          wget -q -O- http://localhost:4000/api/health
         """
       }
