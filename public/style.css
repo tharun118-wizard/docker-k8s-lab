@@ -13,8 +13,7 @@ body{
     radial-gradient(circle at top,#1e293b,#020617);
   font-family:'Segoe UI',sans-serif;
   color:white;
-  overflow:hidden;
-}
+  }
 
 .container{
   width:480px;
