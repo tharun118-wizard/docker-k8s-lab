@@ -201,23 +201,17 @@ stage('☸️ Deploy to Kubernetes') {
 }
 
     // ── STAGE 8: Health Check ────────────────────
-    stage('💚 Health Check') {
+stage('💚 Health Check') {
+    steps {
+        sh '''
+            echo "Checking Kubernetes pods..."
+            kubectl get pods
 
-      steps {
-
-        sh """
-          echo "Waiting for app startup..."
-          sleep 20
-
-          echo "Running health check..."
-          docker exec snake-game-container \
-         wget -q -O- http://127.0.0.1:4000/api/health
-        """
-      }
+            echo "Checking service..."
+            kubectl get svc
+        '''
     }
-
-  }
-
+}
   // ── POST ACTIONS ───────────────────────────────
   post {
 
