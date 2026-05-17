@@ -63,7 +63,6 @@ pipeline {
 
             sh '''
               echo "Checking app files..."
-
               ls -la
             '''
           }
@@ -86,7 +85,6 @@ pipeline {
         always {
           echo 'Parallel test suite completed.'
         }
-
       }
     }
 
@@ -177,41 +175,45 @@ pipeline {
       }
     }
 
-// --- STAGE 7: Deploy to Kubernetes ---
-stage('☸️ Deploy to Kubernetes') {
+    // ── STAGE 7: Deploy to Kubernetes ────────────
+    stage('☸️ Deploy to Kubernetes') {
 
-    steps {
+      steps {
 
         withCredentials([usernamePassword(
-            credentialsId: 'dockerhub-credentials',
-            usernameVariable: 'DOCKER_USER',
-            passwordVariable: 'DOCKER_PASS'
+          credentialsId: 'dockerhub-credentials',
+          usernameVariable: 'DOCKER_USER',
+          passwordVariable: 'DOCKER_PASS'
         )]) {
 
-            sh """
+          sh """
             echo "Deploying to Kubernetes..."
 
             kubectl set image deployment/snake-game-deployment \
             snake-game=${DOCKER_USER}/${APP_NAME}:${BUILD_NUMBER}
 
             kubectl rollout status deployment/snake-game-deployment
-            """
+          """
         }
+      }
     }
-}
 
     // ── STAGE 8: Health Check ────────────────────
-stage('💚 Health Check') {
-    steps {
-        sh '''
-            echo "Checking Kubernetes pods..."
-            kubectl get pods
+    stage('💚 Health Check') {
 
-            echo "Checking service..."
-            kubectl get svc
+      steps {
+
+        sh '''
+          echo "Checking Kubernetes pods..."
+          kubectl get pods
+
+          echo "Checking services..."
+          kubectl get svc
         '''
+      }
     }
-}
+
+  }
 
   // ── POST ACTIONS ───────────────────────────────
   post {
