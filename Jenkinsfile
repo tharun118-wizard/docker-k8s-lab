@@ -178,14 +178,28 @@ pipeline {
     }
 
 // --- STAGE 7: Deploy to Kubernetes ---
-stage('☸️ Deploy') {
+stage('☸️ Deploy to Kubernetes') {
+
     steps {
-        sh '''
-        echo "Docker image pushed successfully"
-        echo "Run kubectl manually on host machine"
-        '''
+
+        withCredentials([usernamePassword(
+            credentialsId: 'dockerhub-credentials',
+            usernameVariable: 'DOCKER_USER',
+            passwordVariable: 'DOCKER_PASS'
+        )]) {
+
+            sh """
+            echo "Deploying to Kubernetes..."
+
+            kubectl set image deployment/snake-game-deployment \
+            snake-game=${DOCKER_USER}/${APP_NAME}:${BUILD_NUMBER}
+
+            kubectl rollout status deployment/snake-game-deployment
+            """
+        }
     }
 }
+
     // ── STAGE 8: Health Check ────────────────────
     stage('💚 Health Check') {
 
