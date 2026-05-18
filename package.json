@@ -7,8 +7,6 @@
   "start": "node app.js",
   "test": "echo 'No tests yet'",
   "dev": "nodemon app.js"
-}
-
   },
   "keywords": ["docker","kubernetes","game"],
   "author": "CSE Student",
